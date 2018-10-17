@@ -1,13 +1,15 @@
 const User = require('./../model/user');
 const util = require('./../util/utils');
+const AbstractController = require('./AbstractController');
+const responseJson = util.responseJson;
 
-class UserController {
+class UserController extends AbstractController {
 
   constructor() {
-
+    super();
   }
 
-  async login(req, res, next) {
+  async login(req, res) {
     const params = req.body;
     try {
       const user = await User.findOne({username: params.username});
@@ -16,31 +18,19 @@ class UserController {
           c: false,
           m: 'this user is not defined'
         })
+        responseJson(res, null, false)
       } else {
         if (params.password == user.password) {
           user.password = null;
           const { _id, username }  = user;
           const token = util.createToken({_id, username });
-          res.send({
-            c: true,
-            m: 'login successfully',
-            d: {
-              user,
-              token
-            }
-          })
+          responseJson(res, { user, token })
         } else {
-          res.send({
-            c: false,
-            m: 'password is error'
-          })
+          responseJson(res, null, false, 'password is error')
         }
       }
     } catch (e) {
-      res.send({
-        c: false,
-        m: 'login error'
-      })
+      responseJson(res, null, false, 'login error')
     }
   }
 }

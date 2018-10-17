@@ -15,25 +15,30 @@ app.use(bodyParser.urlencoded({extended: false}));
 /**
  * 请求拦截，需要登录的token过滤
  */
-app.use(jwt({
-  secret: configSetting.jwtSecret
-}).unless({
-  path: apiInterceptor
-}))
+try {
+  app.use(jwt({
+    secret: configSetting.jwtSecret
+  }).unless({
+    path: apiInterceptor
+  }))
+} catch (e) {
+  throw Error('decode token error')
+}
 
 // 请求统一处理
 app.use(function (err, req, res, next) {
-  if (err) {console.log(err.name)
+  if (err) {
     if (err.name = 'UnauthorizedError') {
       res.status(401).send({
         c: false,
         m: 'token is not defined'
       })
+    } else {
+      res.status(403).send({
+        c: false,
+        m: err.message
+      })
     }
-    res.status(403).send({
-      c: false,
-      m: err.message
-    })
   } else {
     next(); // next() 表示执行后续的中间件直到结束执行api请求
   }
