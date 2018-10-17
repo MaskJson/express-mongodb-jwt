@@ -1,0 +1,23 @@
+{
+  "name": "exp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "express-jwt": "^5.3.1",
+    "js-md5": "^0.7.3",
+    "jsonwebtoken": "^8.3.0",
+    "mongodb": "^3.1.8",
+    "mongoose": "^5.3.3",
+    "request": "^2.88.0"
+  }
+}
