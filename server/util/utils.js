@@ -31,20 +31,29 @@ const decodeToken = (req) => {
   }
 }
 /**
- * responseJson c: code，m: message，d: data
+ * resSuccess c: code，m: message，d: data
  * @type {{createToken: (function(*=): *), decodeToken: decodeToken}}
  */
-const responseJson = (res, d={}, c=true, m='', s=200) => {
+const resSuccess = (res, data, msg) => {
   const result = {
-    c,
-    m,
-    d
+    c: 200,
+    m: msg || '',
+    d: data
   }
-  res.status(s).send(result);
+  res.status(200).send(result);
+}
+const resError = (res, msg) => {
+  const result = {
+    c: 400,
+    m: msg || '',
+    d: data
+  }
+  res.status(200).send(result);
 }
 
 module.exports = {
   createToken,
   decodeToken,
-  responseJson
+  resSuccess,
+  resError
 }

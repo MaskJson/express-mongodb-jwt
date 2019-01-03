@@ -25,17 +25,19 @@ try {
   throw Error('decode token error')
 }
 
-// 请求统一处理
+/**
+ * 请求统一处理,token验证
+ */
 app.use(function (err, req, res, next) {
   if (err) {
     if (err.name = 'UnauthorizedError') {
-      res.status(401).send({
-        c: false,
+      res.status(200).send({
+        c: 401,
         m: 'token is not defined'
       })
     } else {
-      res.status(403).send({
-        c: false,
+      res.status(200).send({
+        c: 403,
         m: err.message
       })
     }
@@ -44,7 +46,9 @@ app.use(function (err, req, res, next) {
   }
 })
 
-// 注册api路由
+/**
+ * 注册api路由
+ */
 router.registerRouter(app);
 
 app.listen(configSetting.listenPort);

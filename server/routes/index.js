@@ -1,4 +1,5 @@
 const user = require('./user');
+const upload = require('./upload')
 
 /**
  * req.body  基于body-parser中间件，将post请求参数json化
@@ -8,5 +9,6 @@ const user = require('./user');
 
 exports.registerRouter = app => {
   app.use('/user', user);
+  app.use('/upload', upload);
 }
 

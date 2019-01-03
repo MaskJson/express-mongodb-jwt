@@ -1,7 +1,7 @@
 const User = require('./../model/user');
 const util = require('./../util/utils');
 const AbstractController = require('./AbstractController');
-const responseJson = util.responseJson;
+const resSuccess = util.resSuccess();
 
 class UserController extends AbstractController {
 
@@ -18,19 +18,24 @@ class UserController extends AbstractController {
           c: false,
           m: 'this user is not defined'
         })
-        responseJson(res, null, false)
       } else {
         if (params.password == user.password) {
           user.password = null;
           const { _id, username }  = user;
           const token = util.createToken({_id, username });
-          responseJson(res, { user, token })
+          resSuccess({ user , token })
         } else {
-          responseJson(res, null, false, 'password is error')
+          res.send({
+            c: false,
+            m: 'password is error'
+          })
         }
       }
     } catch (e) {
-      responseJson(res, null, false, 'login error')
+      res.send({
+        c: false,
+        m: 'login error'
+      })
     }
   }
 }
