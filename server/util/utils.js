@@ -34,7 +34,7 @@ const decodeToken = (req) => {
  * resSuccess c: code，m: message，d: data
  * @type {{createToken: (function(*=): *), decodeToken: decodeToken}}
  */
-const resSuccess = (res, data, msg) => {
+const resSuccess = (res, data = null, msg) => {
   const result = {
     c: 200,
     m: msg || '',
@@ -45,8 +45,8 @@ const resSuccess = (res, data, msg) => {
 const resError = (res, msg) => {
   const result = {
     c: 400,
-    m: msg || '',
-    d: data
+    m: msg || '请求异常',
+    d: null
   }
   res.status(200).send(result);
 }
