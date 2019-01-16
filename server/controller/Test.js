@@ -1,8 +1,8 @@
-const Student = require('./../model/student');
-const Classes = require('./../model/classes');
-const School = require('./../model/school');
 const util = require('./../util/utils');
 const AbstractController = require('./AbstractController');
+
+const CommodityItemFormatOption = require('./../model/commodity/with_option/CommodityItemFormatOption');
+
 const resSuccess = util.resSuccess;
 const resError = util.resError;
 
@@ -10,12 +10,25 @@ class TestController extends AbstractController {
   constructor() {
     super();
   }
-
-  // 添加学校
-  async addSchool(req, res) {
+  async test(req, res) {
+    // const entity = new Commodity({
+    //   name: '2018科比第八代战靴，退役纪念款',
+    //   description: '2019科比最新款战靴，高帮透气，弹力十足',
+    //   coverUrl: 'cover.jpg',
+    //   price: 688,
+    //   businessId: '5c3f01fda329121c84001b5f',
+    //   brandId: '5c3f300eb52b2d1ec4dece1f'
+    // })
+    // const entity = new CommodityFormatOption({
+    //   name: '44',
+    //   commodityFormatId: '5c3f3a4ba568271e9084deac'
+    // })
+    const entity = new CommodityItemFormatOption({
+      commodityFormatOptionId: '5c3f3bff9c2a391f34d249c3',
+      commodityItemId: '5c3f3cd6729af819b0913154'
+    })
     try {
-      const school = new School({name: '测试班级'});
-      school.save((err, entity) => {
+      entity.save((err, entity) => {
         if (err) {
           resError(res, err);
         } else {
@@ -24,65 +37,6 @@ class TestController extends AbstractController {
       })
     } catch (e) {
       resError(res);
-    }
-  }
-  // 添加班级
-  async addClasses(req, res) {
-    try {
-      const classes = new Classes({name: '测试班级', schoolId: '5c2f1d340df97424b4e4d6d4'});
-      classes.save((err, entity) => {
-        if (err) {
-          resError(res, err);
-        } else {
-          resSuccess(res, entity);
-        }
-      })
-    } catch (e) {
-      resError(res);
-    }
-  }
-  // 添加学生
-  async addStudent(req, res) {
-    try {
-      const classes = new Student({name: 'Ling', age: 18, classesId: '5c2f12cce096fc2b04526c27', schoolId: '5c2f1d340df97424b4e4d6d4'});
-      classes.save((err, entity) => {
-        if (err) {
-          resError(res, err);
-        } else {
-          resSuccess(res, entity);
-        }
-      })
-    } catch (e) {
-      resError(res);
-    }
-  }
-  // 多表级联查询测试
-  async queryTest(req, res) {
-    try {
-      Student.find({}, 'name').populate({
-        path: 'classesId',
-        model: 'Classes',
-        select: '_id',
-        populate: {
-          path: 'schoolId',
-          model: 'School',
-          select: '_id'
-        }
-      }).populate({
-        path: 'schoolId',
-        model: 'School',
-        select: '_id'
-      }).exec((err, list) => {
-        if (err) {
-          console.info(err)
-          resError(res);
-        } else {
-          console.info(list)
-          resSuccess(res, list);
-        }
-      })
-    } catch (e) {
-      resError(res, e);
     }
   }
 }

@@ -3,9 +3,6 @@ const TestController = require('./../controller/Test');
 
 const router = express.Router();
 
-router.get('/addstu', TestController.addStudent);
-router.get('/addclass', TestController.addClasses);
-router.get('/addschool', TestController.addSchool);
-router.get('/query', TestController.queryTest);
+router.get('/test', TestController.test);
 
 module.exports = router;

@@ -11,6 +11,6 @@ const test = require('./test');
 exports.registerRouter = app => {
   app.use('/user', user);
   app.use('/upload', upload);
-  app.use('/test', test);
+  app.use(test);
 }
 

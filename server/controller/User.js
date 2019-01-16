@@ -1,4 +1,4 @@
-const User = require('./../model/user');
+const User = require('../model/user/User');
 const util = require('./../util/utils');
 const AbstractController = require('./AbstractController');
 const resSuccess = util.resSuccess;
