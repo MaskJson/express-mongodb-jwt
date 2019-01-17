@@ -49,6 +49,17 @@ class UserController extends AbstractController {
       resError(res)
     }
   }
+  async test(req, res) {
+    try {
+      const user = await User.findOne({username: 'zyc'});
+      if (user) {
+        user.password = '123456';
+      }
+      resSuccess(res, 'nick')
+    } catch (e) {
+      resError(res);
+    }
+  }
 }
 
 module.exports = new UserController();

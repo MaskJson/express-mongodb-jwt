@@ -1,7 +1,7 @@
 const apiInterceptor = [
   '/user/login',
   '/user/register',
-  '/test'
+  '/user/test'
 ]
 
 module.exports = apiInterceptor;
