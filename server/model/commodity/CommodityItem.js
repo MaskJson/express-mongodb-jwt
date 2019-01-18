@@ -5,11 +5,12 @@ const Schema = mongoose.Schema;
 const CommodityItemSchema = new Schema({
   originalPrice: {type: Number}, // 原价
   promotionPrice: {type: Number}, // 促销价
+  photo: {type: String},
   count: {type: Number}, // 库存
   parentId: {
     type: Schema.ObjectId,
     ref: 'Commodity'
   }
-})
+});
 
 module.exports = mongoose.model('CommodityItem', CommodityItemSchema, 'commodity_item');

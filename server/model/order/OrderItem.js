@@ -9,9 +9,17 @@ const OrderItemSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'CommodityItem'
   },
+  commodityId: {
+    type: Schema.ObjectId,
+    ref: 'Commodity'
+  },
   orderId: {
     type: Schema.ObjectId,
     ref: 'Order'
+  },
+  status: {
+    type: Number, // 订单状态：0：作废，1：已下单待发货，2：已发货待收货，3：确认收货待评价，4：订单完成
+    default: 1
   }
 })
 
