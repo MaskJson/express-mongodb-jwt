@@ -2,7 +2,11 @@ const mongoose = require('../../mongodb/index');
 const Schema = mongoose.Schema;
 // 购物车
 
-const UserCartSchema = new Schema({
+const CartItemSchema = new Schema({
+  parentId: {
+    type: Schema.ObjectId,
+    ref: 'Cart'
+  },
   commodityItemId: {        // 商品id
     type: Schema.ObjectId,
     ref: 'CommodityItem'
@@ -15,3 +19,5 @@ const UserCartSchema = new Schema({
     type: Number // 数量
   }
 })
+
+module.exports = mongoose.model('CartItem', CartItemSchema, 'cart_item');

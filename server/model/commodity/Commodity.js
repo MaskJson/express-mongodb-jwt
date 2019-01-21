@@ -10,8 +10,10 @@ const CommoditySchema = new Schema({
     type: Number,
     default: 0
   }, // 点击量
-  coverUrl: {type: String}, // 封面
+  photo: {type: String}, // 封面
   price: {type: Number}, // 最低售价，仅用于货品列表的展示，不同规格可能价格不一样, 也可通过商品排序取最低
+  activityPrice: {type: Number},
+  freight: {type: Number}, // 运费
   sales: {
     type: Number,
     default: 0

@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const BusinessSchema = new Schema({
   name: {type: String},
   description: {type: String},
-  logo: {type: String}
+  logo: {type: String},
+  address: {type: String}
 })
 
 module.exports = mongoose.model('Business', BusinessSchema, 'business');
