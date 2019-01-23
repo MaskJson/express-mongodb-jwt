@@ -1,5 +1,6 @@
 const Commodity = require('./../model/commodity/Commodity');
 const CommodityItem = require('./../model/commodity/CommodityItem');
+const CommodityItemFormatOption = require('./../model/commodity/with_option/CommodityItemFormatOption');
 const OrderItem = require('./../model/order/OrderItem');
 const Brand = require('./../model/option/Brand');
 const Business = require('./../model/business/Business');
@@ -46,7 +47,6 @@ class CommodityController extends AbstractController {
   // 获取货品详情
   async getCommodityDetail(req, res) {
     const _id = req.query.id;
-    console.error(_id)
     const commodity = await Commodity.findOne({_id: _id});
     if (commodity) {
       const business = await Business.findOne({_id: commodity.businessId}); // 获取货品所属商家
@@ -82,6 +82,28 @@ class CommodityController extends AbstractController {
       Promise.all(promises).then(data => {
         result.commodityItems = data[0];
         result.coupons = data[1];
+        const formatPromises = [];
+        result.commodityItems.forEach(item => {
+          formatPromises.push(new Promise((resolve, reject) => {
+            CommodityItemFormatOption.find({commodityItemId: item._id}).then(list => {
+              resolve(list);
+            }).catch(err => {
+              resolve([]);
+            })
+          }))
+        })
+        return Promise.all(formatPromises)
+      }).then(data => {
+        result.commodityItems = result.commodityItems.map((commodityItem, index) => {
+          const {_id, originalPrice, count, photo} = commodityItem;
+          return {
+            _id,
+            originalPrice,
+            count,
+            photo,
+            formats: data[index].map(format => format.commodityFormatOptionId)
+          }
+        })
         resSuccess(res, result);
       }).catch(err => {
         resSuccess(res, result);
