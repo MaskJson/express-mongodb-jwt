@@ -74,6 +74,7 @@ class CommodityController extends AbstractController {
         description: commodity.description,
         photo: commodity.photo,
         price: commodity.price,
+        sales: commodity.sales,
         activityPrice: commodity.activityPrice,
         freight: commodity.freight,
         business: business,
