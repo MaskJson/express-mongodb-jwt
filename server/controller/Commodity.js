@@ -1,8 +1,11 @@
 const Commodity = require('./../model/commodity/Commodity');
 const CommodityItem = require('./../model/commodity/CommodityItem');
+const CommodityFormat = require('./../model/commodity/with_option/CommodityFormat');
+const CommodityFormatOption = require('./../model/commodity/with_option/CommodityFormatOption');
 const CommodityItemFormatOption = require('./../model/commodity/with_option/CommodityItemFormatOption');
 const OrderItem = require('./../model/order/OrderItem');
 const Brand = require('./../model/option/Brand');
+const Format = require('./../model/option/Format');
 const Business = require('./../model/business/Business');
 const Coupon = require('./../model/shopping_activity/Coupon');
 const util = require('./../util/utils');
@@ -68,6 +71,21 @@ class CommodityController extends AbstractController {
             resolve([]);
           })
       }));
+      promises.push(new Promise((resolve, reject) => {  // 获取货品规格及规格对应的值
+        CommodityFormat.find({commodityId: _id}).populate({path: 'formatId', model: 'Format'}).then(commodityFormats => {
+          const commodityFormatIds = commodityFormats.map(item => item._id);
+          CommodityFormatOption.find({commodityFormatId: {$in: commodityFormatIds}}).then(formatOptions => {
+            resolve({
+              commodityFormats: commodityFormats,
+              commodityFormatOptions: formatOptions
+            })
+          }).catch(err => {
+            resolve([]);
+          })
+        }).catch(err => {
+          resolve([]);
+        })
+      }));
       const result = {
         _id: commodity._id,
         name: commodity.name,
@@ -83,6 +101,30 @@ class CommodityController extends AbstractController {
       Promise.all(promises).then(data => {
         result.commodityItems = data[0];
         result.coupons = data[1];
+        let {commodityFormats, commodityFormatOptions} = data[2];
+        commodityFormatOptions = commodityFormatOptions.map(item => {
+          return {
+            _id: item._id,
+            name: item.name,
+            commodityFormatId: item.commodityFormatId
+          }
+        })
+        commodityFormats = commodityFormats.map((item) => {
+          const options = commodityFormatOptions.filter(option => {
+            return item._id.toString() == option.commodityFormatId.toString();
+          });
+          return {
+            _id: item._id,
+            name: item.formatId.name,
+            options: options.map(item => {
+              return {
+                _id: item._id,
+                name: item.name
+              }
+            })
+          }
+        })
+        result.formats = commodityFormats;
         const formatPromises = [];
         result.commodityItems.forEach(item => {
           formatPromises.push(new Promise((resolve, reject) => {
