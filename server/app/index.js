@@ -1,4 +1,6 @@
-const express = require('express');
+const app = require('express')();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 const bodyParser = require('body-parser'); // request body
 const cookieParser = require('cookie-parser');
 const jwt = require('express-jwt');
@@ -6,8 +8,8 @@ const configSetting = require('./config');
 const apiInterceptor = require('../config/apiInterceptor');
 const router = require('./../routes');
 const cors = require('cors');
+const initSocket = require('../socket/index').init;
 
-const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -51,4 +53,7 @@ app.use(function (err, req, res, next) {
  */
 router.registerRouter(app);
 
-app.listen(configSetting.listenPort);
+server.listen(configSetting.listenPort);
+
+initSocket(io);
+
